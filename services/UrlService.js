@@ -14,7 +14,7 @@ function saveURLDetails(origUrl) {
         try {
             let url = await Url.findOne({ origUrl });
             if (url) {
-                res.json(url);
+                resolve(url)
             } else {
                 const shortUrl = `${base}/${urlId}`;
 

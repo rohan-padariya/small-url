@@ -45,7 +45,7 @@ router.get('/:urlId', async (req, res) => {
 
 router.get('/api/list', async (req, res) => {
     try {
-        let list = await Url.find();
+        let list = await Url.find().sort({"date":-1});;
         return res.status(200).send(list);
     } catch (err) {
         console.log(err);
