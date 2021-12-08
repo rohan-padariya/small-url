@@ -1,0 +1,25 @@
+{
+  "name": "small-url",
+  "version": "1.0.0",
+  "description": "Tool to shorten url length",
+  "main": "app.js",
+  "dependencies": {
+    "express": "^4.17.1",
+    "mongoose": "^6.0.15",
+    "nodemon": "^2.0.15"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rohan-padariya/small-url.git"
+  },
+  "author": "Rohan Padariya",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rohan-padariya/small-url/issues"
+  },
+  "homepage": "https://github.com/rohan-padariya/small-url#readme"
+}
