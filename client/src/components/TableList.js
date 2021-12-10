@@ -57,7 +57,7 @@ export const TableList = () => {
 
     const getDomainFromUrl = (url) => {
         var match = url.match(/:\/\/(www[0-9]?\.)?(.[^/:]+)/i);
-        console.log(url, match)
+        // console.log(url, match)
         if (match != null && match.length > 2 && typeof match[2] === 'string' && match[2].length > 0)
             return 'https://www.google.com/s2/favicons?domain=' + match[2];
         else
