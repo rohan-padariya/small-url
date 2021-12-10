@@ -1,0 +1,19 @@
+{
+    "version": 2,
+    "public": true,
+    "regions": [
+        "bru"
+    ],
+    "builds": [
+        {
+            "src": "./app.js",
+            "use": "@vercel/node"
+        }
+    ],
+    "routes": [
+        {
+            "src": "/.*",
+            "dest": "app.js"
+        }
+    ]
+}

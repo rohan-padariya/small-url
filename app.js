@@ -2,6 +2,8 @@ const express = require('express')
 const path = require('path')
 const app = express()
 const port = 3000
+var os = require("os");
+
 
 const connectDB = require('./config/db');
 
@@ -22,10 +24,10 @@ connectDB().then(res => {
 //     res.send('Hello World!')
 // })
 
-// app.get('/', (req, res) => {
-//     console.log('here')
-//     res.sendFile(path.join(__dirname, 'build', 'index.html'))
-// })
+app.get('/', (req, res) => {
+    console.log('here')
+    res.sendFile(path.join(__dirname, 'build', 'index.html'))
+})
 app.use('/', router);
 
 app.listen(port, () => {
