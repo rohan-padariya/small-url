@@ -10,8 +10,13 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, '/client/build')))
 
 const router = require('./controllers/UrlController')
+const UrlService = require('./services/UrlService')
 
-connectDB()
+connectDB().then(res => {
+    // UrlService.
+}).catch(err => {
+    console.log(error)
+})
 
 // app.get('/', (req, res) => {
 //     res.send('Hello World!')

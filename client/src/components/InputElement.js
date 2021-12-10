@@ -1,13 +1,14 @@
 import axios from 'axios';
 import { React, useState } from 'react'
 import { Input } from 'antd';
+import eventBus from "../service/EventBusService";
 const { Search } = Input;
 const NotificationService = require('../service/NotificationService');
 
 
 function saveURL(val) {
     return new Promise(async (resolve, reject) => {
-        const response = await axios.post('/api/short', { origUrl: val });
+        const response = await axios.post('/api/short', { originalURL: val });
         if (response.status == 200) {
             resolve(response.data)
         } else {
@@ -24,6 +25,7 @@ function InputElement(props) {
     const handleOnSearch = async (val) => {
         console.log(val)
         if (!val) {
+            NotificationService.notify.error('URL cannot be empty')
             return;
         }
         setisLoading(true)
@@ -34,6 +36,7 @@ function InputElement(props) {
         } else {
             NotificationService.notify.error(data.message)
         }
+        eventBus.dispatch("newURLAdded", { message: data.message });
         setisLoading(false)
         setvalue('')
     }

@@ -8,28 +8,31 @@ module.exports = {
 }
 
 
-function saveURLDetails(origUrl) {
+function saveURLDetails(originalURL) {
     return new Promise(async (resolve, reject) => {
         const base = AppConstant.BASE;
         try {
-            let url = await Url.findOne({ origUrl });
+            let url = await Url.findOne({ originalURL });
             if (url) {
                 resolve(url)
             } else {
-                let counter = await getCounter();
+                // let counter = await getCounter();
 
-                const urlId = helper.getUniqueId(counter);
+                const urlID = helper.getUniqueId();
 
-                const shortUrl = `${base}/${urlId}`;
+                // let isHashExists = await Url.findOne({ urlID });
+                // console.log('hash --', isHashExists);
+
+                const shortUrl = `${base}/${urlID}`;
                 url = new Url({
-                    origUrl,
+                    originalURL,
                     shortUrl,
-                    urlId,
+                    urlID,
                     date: new Date(),
                 });
 
                 let data = await url.save();
-                await updateCounter(++counter);
+                // await updateCounter(++counter);
                 resolve(data)
             }
         } catch (error) {

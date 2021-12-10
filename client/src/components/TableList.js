@@ -1,7 +1,8 @@
 import React from 'react'
-import { Table, Tag, Modal, Space, Tooltip, Button, Skeleton, SkeletonProps } from 'antd';
+import { Table, Tag, Modal, Space, Tooltip, Button, Skeleton, SkeletonProps, Descriptions } from 'antd';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import eventBus from "../service/EventBusService";
 import { SearchOutlined, CopyOutlined, QrcodeOutlined, LogoutOutlined } from '@ant-design/icons';
 import { createFromIconfontCN } from '@ant-design/icons';
 
@@ -63,6 +64,12 @@ export const TableList = () => {
             return 'https://www.google.com/s2/favicons?domain=null'
     }
 
+    const formatDate = (datestr) => {
+        let date = new Date(datestr,)
+        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        return date.toLocaleDateString(undefined, options)
+    }
+
     const columns = [
         // {
         //     title: '',
@@ -73,24 +80,24 @@ export const TableList = () => {
         //     render: (text) => <> <img src="https://www.google.com/s2/favicons?domain=stackoverflow.com" alt="Smiley face" width="32" height="32" style={{ "vertical-align": "bottom" }}></img></>
         // },
         {
-            title: 'Url',
-            dataIndex: 'origUrl',
-            key: 'origUrl',
-            // width: '25%',
-            width: 20,
+            title: 'Original Url',
+            dataIndex: 'originalURL',
+            key: 'originalURL',
+            width: '35%',
+            // width: 30,
             onCell: () => {
                 return {
                     style: {
                         whiteSpace: 'nowrap',
-                        maxWidth: 20,
+                        maxWidth: 30,
                     }
                 }
             },
             render: (text, record, index) =>
                 <>
                     <div style={{ 'display': 'flex' }}>
-                        <img src={getDomainFromUrl(text)} alt="" width="20" height="20" ></img>
-                        <EllipsisTooltip style={{ marginRight: 10, 'text-align': 'center' }} title={text}>{text}</EllipsisTooltip>
+                        <img style={{ marginRight: 10, }} src={getDomainFromUrl(text)} alt="" width="20" height="20" ></img>
+                        <EllipsisTooltip title={text}>{text}</EllipsisTooltip>
                     </div>
 
                 </>
@@ -101,12 +108,12 @@ export const TableList = () => {
             title: 'Short Url',
             dataIndex: 'shortUrl',
             key: 'shortUrl',
-            width: 10,
+            width: '25%',
             onCell: () => {
                 return {
                     style: {
                         whiteSpace: 'nowrap',
-                        maxWidth: 10,
+                        maxWidth: 20,
                     }
                 }
             },
@@ -129,22 +136,22 @@ export const TableList = () => {
             title: 'Clicks',
             dataIndex: 'clicks',
             key: 'clicks',
-            width: '5%',
-            onCell: () => {
-                return {
-                    style: {
-                        whiteSpace: 'nowrap',
-                        maxWidth: 10,
-                    }
-                }
-            },
-            render: (text) => <EllipsisTooltip title={text}>{text}</EllipsisTooltip>
+            width: '8%',
+            // onCell: () => {
+            //     return {
+            //         style: {
+            //             whiteSpace: 'nowrap',
+            //             maxWidth: 10,
+            //         }
+            //     }
+            // },
+            // render: (text) => <EllipsisTooltip title={text}>{text}</EllipsisTooltip>
         },
         {
-            title: 'Date',
+            title: 'Created At',
             key: 'date',
             dataIndex: 'date',
-            width: 50,
+            width: '20%',
             onCell: () => {
                 return {
                     style: {
@@ -153,7 +160,7 @@ export const TableList = () => {
                     }
                 }
             },
-            render: (text) => <EllipsisTooltip title={text}>{text}</EllipsisTooltip>
+            render: (text) => <EllipsisTooltip title={text}>{formatDate(text)}</EllipsisTooltip>
         },
         // {
         //     title: 'Action',
@@ -191,6 +198,10 @@ export const TableList = () => {
     }
 
     useEffect(() => {
+
+        eventBus.on("newURLAdded", (data) =>
+            refreshTable()
+        );
         try {
             refreshTable()
         } catch (error) {
@@ -225,19 +236,20 @@ export const TableList = () => {
                 <div style={{ textAlign: 'center' }}>
                     <QRCode value={qrCodeVal} />
                     <br></br>
-                    {/* <br></br>
-                    <br></br>
-                    <br></br>
-                    <br></br>
-                    <br></br>
-                    <QRCode value="http://facebook.github.io/react/" /> */}
                     <div style={{ marginTop: '10px' }}>
                         Scan QR to get short URL
                     </div>
                 </div>
             </Modal >
+            <Descriptions
+                title="History"
+                bordered
+                size="middle"
+            ></Descriptions>
             <Table columns={columns} dataSource={urlList}
-                style={{ width: '100%', height: '100%' }}
+                size="small"
+                // scroll={{ y: 500, x: 500 }}
+                pagination={{ pageSize: 10}}
                 onRow={(record, rowIndex) => {
                     return {
                         onClick: event => { }, // click row
