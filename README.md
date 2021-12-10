@@ -1,5 +1,6 @@
 # small-url
- Free tool to shorten a URL or reduce a link. \n
+ Free tool to shorten a URL or reduce a link.
+ 
  Uses MD5 function to generate unique key.
  
  Live Url - https://small-url-rohanpadariya-gmailcom.vercel.app/
