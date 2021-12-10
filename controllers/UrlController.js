@@ -13,19 +13,22 @@ router.post('/api/short', async (req, res) => {
 
     if (helper.validateUrl(origUrl)) {
         try {
-            let url = await UrlService.saveURLDetails(origUrl);
-            if (url) {
-                res.status(200).json(url);
+            let data = await UrlService.saveURLDetails(origUrl);
+            if (data) {
+                // res.status(200).json(url);
+                helper.responseStatus.success(res, data, 'Short url created successfully');
             } else {
-                res.status(400).json('Server Error');
+                // res.status(200).json('Server Error');
+                helper.responseStatus.error(res, origUrl, 'Unexpected error occured. Please try again.');
             }
 
         } catch (err) {
             console.log(err);
-            res.status(500).json('Server Error');
+            // res.status(500).json('Server Error');
+            helper.responseStatus.error(res, origUrl, 'Unexpected error occured. Please try again.');
         }
     } else {
-        res.status(400).json('Invalid Original Url');
+        helper.responseStatus.error(res, origUrl, 'Entered URL is either Invalid or URL domain banned by admin. Please try again.');
     }
 });
 
@@ -45,8 +48,8 @@ router.get('/:urlId', async (req, res) => {
 
 router.get('/api/list', async (req, res) => {
     try {
-        let list = await Url.find().sort({"date":-1});;
-        return res.status(200).send(list);
+        let list = await Url.find().sort({ "date": -1 });;
+        return helper.responseStatus.success(res, list, 'Url list fetched successfully');;
     } catch (err) {
         console.log(err);
         res.status(500).json('Server Error');

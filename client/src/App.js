@@ -1,5 +1,5 @@
 import './App.css';
-// import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 // import axios from 'axios';
 import TableList from './components/TableList';
 import InputElement from './components/InputElement';
@@ -17,8 +17,13 @@ const { Header, Content, Footer } = Layout;
 //     }
 // }
 
+const headerArr = [
+    "Small-URL"
+]
+
 function App() {
 
+    // const [newUrl, setnewUrl] = useState(initialState)
     // useEffect(() => {
     //     getList()
     // }, [])
@@ -28,9 +33,9 @@ function App() {
             <Header>
                 <div className="logo" />
                 <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['1']}>
-                    {new Array(1).fill(null).map((_, index) => {
+                    {headerArr.map((val, index) => {
                         const key = index + 1;
-                        return <Menu.Item key={key}>{`nav ${key}`}</Menu.Item>;
+                        return <Menu.Item key={key}>{val}</Menu.Item>;
                     })}
                 </Menu>
             </Header>

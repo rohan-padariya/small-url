@@ -2,6 +2,8 @@ import axios from 'axios';
 import { React, useState } from 'react'
 import { Input } from 'antd';
 const { Search } = Input;
+const NotificationService = require('../service/NotificationService');
+
 
 function saveURL(val) {
     return new Promise(async (resolve, reject) => {
@@ -14,7 +16,7 @@ function saveURL(val) {
     })
 }
 
-function InputElement() {
+function InputElement(props) {
 
     const [value, setvalue] = useState('');
     const [isLoading, setisLoading] = useState(false);
@@ -27,6 +29,11 @@ function InputElement() {
         setisLoading(true)
         let data = await saveURL(val)
         console.log(data)
+        if (data.success) {
+            NotificationService.notify.success(data.message)
+        } else {
+            NotificationService.notify.error(data.message)
+        }
         setisLoading(false)
         setvalue('')
     }

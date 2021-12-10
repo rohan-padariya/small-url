@@ -1,3 +1,6 @@
+const crypto = require('crypto');
+const Appconstant = require('./Appconstant');
+
 const uuid = () => {
     // http://www.ietf.org/rfc/rfc4122.txt
     var s = [];
@@ -13,26 +16,47 @@ const uuid = () => {
     return uuid;
 }
 
-const getUniqueId = (length) => {
-    var result = '';
+const getUniqueId = (counter) => {
     var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    var charactersLength = characters.length;
-    for (var i = 0; i < length; i++) {
-        result += characters.charAt(Math.floor(Math.random() *
-            charactersLength));
-    }
-    return result;
+    const secret = counter ? counter.toString() : Appconstant.SECRET;
+
+    const crypto = require("crypto");
+    const md5Hasher = crypto.createHmac("md5", secret);
+    const hash = md5Hasher.update(characters).digest("hex");
+    // console.log(hash.substring(0,7));
+
+    return hash.substring(0, 7);
 }
 
 const validateUrl = (value) => {
-    // return /^(?:(?:(?:https?|ftp):)?\/\/)(?:\S+(?::\S*)?@)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:[/?#]\S*)?$/i.test(
-    //     value
-    // );
-    return true;
+    return /^(?:(?:(?:https?|ftp):)?\/\/)(?:\S+(?::\S*)?@)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:[/?#]\S*)?$/i.test(
+        value
+    );
+    // return true;
+}
+
+const responseStatus = {
+    success: (res, data, message) => {
+        let json = {
+            success: true,
+            data: data,
+            message: message
+        }
+        return res.status(200).send(json);
+    },
+    error: (res, data, message) => {
+        let json = {
+            success: false,
+            data: data,
+            message: message
+        }
+        return res.status(200).send(json);
+    },
 }
 
 module.exports = {
     uuid,
     validateUrl,
-    getUniqueId
+    getUniqueId,
+    responseStatus
 }
